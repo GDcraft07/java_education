@@ -1,7 +1,7 @@
 package universityEducation.dataStructures.BinarySearchTree;
 import java.util.*;
 
-public class BinarySearchTree<K extends Comparable<K>, V> {
+public class BinarySearchTree<K extends Comparable<K>, V> implements Iterable<K>{
     private class Node {
         K key;
         V value;
@@ -203,5 +203,115 @@ public class BinarySearchTree<K extends Comparable<K>, V> {
         return this.size == 0;
     }
 
-    //Сделать remove и iterator
+    public V remove(K key) {
+        Node current = this.root;
+        Node parent = null;
+
+        if (current == null) {
+            return null;
+        }
+
+        while (current != null) {
+            int compareResult = key.compareTo(current.key);
+
+            if (compareResult < 0) {
+                parent = current;
+                current = current.left;
+            }
+
+            else {
+                if (compareResult > 0) {
+                    parent = current;
+                    current = current.right;
+                }
+
+                else {
+                    break;
+                }
+            }
+        }
+
+        V removedValue = current.value;
+
+
+        if (current.left == null || current.right == null) {
+            Node child = (current.left != null) ? current.left : current.right;
+
+            if (parent == null) {
+                this.root = child;
+            }
+
+            else {
+                if (parent.left == current) {
+                    parent.left = child;
+                }
+
+                else {
+                    parent.right = child;
+                }
+            }
+        }
+
+        else {
+            Node successorParent = current;
+            Node successor = current.right;
+
+            while (successor.left != null) {
+                successorParent = successor.left;
+                successor = successor.left;
+            }
+
+            current.key = successor.key;
+            current.value = successor.value;
+
+            if (successorParent.left == successor) {
+                successorParent.left = successor.right;
+            }
+
+            else {
+                successorParent.right = successor.right;
+            }
+        }
+
+        this.size--;
+        return removedValue;
+    }
+
+
+    @Override
+    public Iterator<K> iterator() {
+        return new Iterator<K>() {
+
+            private final Deque<Node> stack = new ArrayDeque<>();
+
+            {
+                this.pushLeft(root);
+            }
+
+            private void pushLeft(Node node) {
+                while (node != null) {
+                    this.stack.push(node);
+                    node = node.left;
+                }
+            }
+
+            @Override
+            public boolean hasNext() {
+                return !this.stack.isEmpty();
+            }
+
+            @Override
+            public K next() {
+                if (!this.hasNext()) {
+                    throw new NoSuchElementException();
+                }
+
+                Node node = this.stack.pop();
+
+                this.pushLeft(node.right);
+
+                return node.key;
+            }
+        };
+    }
 }
