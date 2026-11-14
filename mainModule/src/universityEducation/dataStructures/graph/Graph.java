@@ -50,6 +50,20 @@ public class Graph {
         return this.removeArc(from, to);
     }
 
+    public int[] dfs(Visitor visitor) {
+        boolean[] passed = new boolean[this.size];
+        int[] tree = new int[this.size];
+
+        for (int i = 0; i < this.size; i++) {
+            if (!passed[i]) {
+                tree[i] = i;
+                dfs(i, passed, tree, visitor);
+            }
+        }
+
+        return tree;
+    }
+
     public int[] dfs(int start, Visitor visitor) {
         Objects.checkIndex(start, this.size);
         boolean[] passed = new boolean[this.size];

@@ -33,14 +33,15 @@ public class Traverse {
             System.out.printf("Forward from %d to %d%n", from, to);
         }
 
-        @Override
-        public void backward(int from, int to) {
-            System.out.printf("Backward from %d to %d%n", from, to);
-        }
+//        @Override
+//        public void backward(int from, int to) {
+//            System.out.printf("Backward from %d to %d%n", from, to);
+//        }
     };
 
     public static void main(String[] args) {
 //        System.out.println(Arrays.toString(g.dfs(6, printer)));
+//        System.out.println(Arrays.toString(g.dfs(printer)));
 //        System.out.println(Arrays.toString(g.bfs(6, printer)));
     }
 }
